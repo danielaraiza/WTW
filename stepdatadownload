@@ -1,0 +1,18 @@
+#' Get step data from fitbit.com using fitbitScraper package
+#' 
+#' @return A list of data frames containing individual participants' data for the year 2015
+
+#install.packages("fitbitScraper")
+library("fitbitScraper")
+
+#creates one vector with IDs 1 through 59
+IDs = c(paste("x-0", (1:9), sep = ""), paste("x-", (10:59), sep = "")) #replace x with IDs
+#creates one character vector with email logins
+emails = paste(IDs, "@mednet.ucla.edu", sep="") 
+
+pID = NULL
+for(i in emails[5:7]){
+  cookie = login(email = i, password = "", rememberMe = F)
+  df = get_daily_data(cookie, what = "steps", start_date="2015-01-01", end_date="2015-12-31")  
+  pID = rbind(pID, df)
+}
